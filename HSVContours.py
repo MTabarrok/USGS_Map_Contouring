@@ -6,6 +6,7 @@ from PIL import Image
 st.title('HSV Color Masking and Contour Detection')
 
 uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "png", "tif"])
+fileinfo = uploaded_file.name[:-8]
 
 if uploaded_file is not None:
     img = Image.open(uploaded_file)
@@ -38,7 +39,7 @@ if uploaded_file is not None:
         # Option to save the masked image
     if st.button('Save Masked Image'):
         masked_img = Image.fromarray(mask)
-        masked_img.save(f'C:/Users/maxwe/OneDrive/Documents/Land Reclemation/NewYork/Masks/{uploaded_file.name}-HSV[{lower_range}][{upper_range}].tif')
+        masked_img.save(f'C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclemation/NewYorkMaps/Masks/{fileinfo}-HSV[{lower_range}][{upper_range}].tif')
         st.success('Image saved as masked_image.tif')
 
     st.subheader('Morphological Operations')
@@ -70,7 +71,7 @@ if uploaded_file is not None:
 
     if st.button('Save Countour Image'):
         masked_img = Image.fromarray(img_with_contours)
-        masked_img.save(f'C:/Users/maxwe/OneDrive/Documents/Land Reclemation/NewYork/Contours/{uploaded_file.name}-Contour[{min_contour_area}]-HSV[{lower_range}][{upper_range}]masked_image.tif')
+        masked_img.save(f'C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclemation/NewYorkMaps/Contours/{fileinfo}-Contour[{min_contour_area}]-HSV[{lower_range}][{upper_range}]masked_image.tif')
         st.success('Image saved as masked_image.tif')
 
     st.subheader('Image with Contours')
@@ -100,8 +101,8 @@ if uploaded_file is not None:
 
     if st.button('Save Countour Image Black Background and Bounding Box'):
         masked_img = Image.fromarray(img_contours)
-        masked_img.save(f'C:/Users/maxwe/OneDrive/Documents/Land Reclemation/NewYork/Areas/{uploaded_file.name}-bounds[{tlx},{tly}]x[{brx},{bry}]-HSV{lower_range}{upper_range}-kernel[{kernel_size}]-contour[{min_contour_area}].tif')
-        st.success('Image saved as masked_image.tif')
+        masked_img.save(f'C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclamation/NewYorkMaps/Areas/{fileinfo}-bounds[{tlx},{tly}]x[{brx},{bry}]-HSV{lower_range}{upper_range}-kernel[{kernel_size}]-contour[{min_contour_area}].tif')
+        st.success(f'Image saved as C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclamation/NewYorkMaps/Areas/{fileinfo}-bounds[{tlx},{tly}]x[{brx},{bry}]-HSV{lower_range}{upper_range}-kernel[{kernel_size}]-contour[{min_contour_area}].tif')
 
     AreaFilled = st.file_uploader("Choose a file", type=["jpg", "png", "tif"])
 
@@ -133,6 +134,7 @@ if uploaded_file is not None:
     
         st.subheader('Masked Image')
         st.image(RGBmasked_image, caption='Masked Image', use_column_width=True)
+
     
         # Calculate the total and red pixel count within the image
         total_pixels = Areaimg.width * Areaimg.height
@@ -140,7 +142,13 @@ if uploaded_file is not None:
     
         # Calculate the land percentage
         land_percentage = (red_pixels / total_pixels) * 100
+        land_percentage = str(land_percentage)[:5]
         st.subheader(f'Land percentage = {land_percentage}')
+        
+        if st.button('Save Red Isolated Image'):
+            masked_img = Image.fromarray(RGBmasked_image)
+            masked_img.save(f'C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclamation/NewYorkMaps/OnlyRed/{fileinfo}-landpercent[{land_percentage}]-bounds[{tlx},{tly}]x[{brx},{bry}]-HSV{lower_range}{upper_range}-kernel[{kernel_size}]-contour[{min_contour_area}].tif')
+            st.success(f'Image saved as C:/Users/maxwe/AppData/Local/Programs/Python/Python311/Scripts/Projects/LandReclamation/NewYorkMaps/OnlyRed/{fileinfo}-landpercent[{land_percentage}]-bounds[{tlx},{tly}]x[{brx},{bry}]-HSV{lower_range}{upper_range}-kernel[{kernel_size}]-contour[{min_contour_area}].tif')
 
 
 
